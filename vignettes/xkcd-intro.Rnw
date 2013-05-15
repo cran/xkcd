@@ -1,0 +1,660 @@
+%% -*- ispell-local-dictionary: "british" -*-
+%% Emilio Torres Manzanera
+%% University of Oviedo
+%% Time-stamp: <2013-05-15 Wed 09:45 emilio on emilio-despacho>
+%% =====================================================================
+% \VignetteIndexEntry{Graphs in XKCD style}
+% \VignettePackage{picante}
+\documentclass[10pt]{article}
+\usepackage[top=2in, bottom=1.5in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{hyperref}
+
+% See 
+% Customizing Sweave to Produce A Better Looking LaTEX Output
+% Ross Ihaka
+% \DefineVerbatimEnvironment{Sinput}{Verbatim} {xleftmargin=2em}
+% \DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=2em}
+% \DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+% \fvset{listparameters={\setlength{\topsep}{0pt}}}
+% \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+
+
+\title{An introduction to the xkcd package}
+\author{Emilio Torres Manzanera\\ (torres@uniovi.es)}
+\date{May 2013}
+
+\begin{document}
+\SweaveOpts{strip.white=true}
+\SweaveOpts{png=TRUE}
+\SweaveOpts{pdf=FALSE} % Pdf images must embed the fonts. 
+\SweaveOpts{eps=FALSE}
+\SweaveOpts{center = TRUE}
+\setkeys{Gin}{width=0.5\textwidth} % After begin{document}
+
+<<echo=FALSE>>=
+options(width=60)
+options(continue=" ") # To avoid the insidious + at the begining of the line
+@
+
+\maketitle
+
+\begin{abstract}
+    
+    \end{abstract}
+
+\begin{center}
+<<twoman,fig=TRUE,echo=FALSE>>=
+library(xkcd)
+xrange <- c(-4,4)
+yrange <- c(-10,5.2)
+ratioxy <- diff(xrange)/diff(yrange)
+plotmen <- function(x,y, scale,ratioxy,...){
+ mapping <- aes(x,  y,
+                 scale,
+                 ratioxy,
+                 angleofspine ,
+                 anglerighthumerus,
+                 anglelefthumerus,
+                 anglerightradius,
+                 angleleftradius,
+                 anglerightleg,
+                 angleleftleg,
+                 angleofneck)
+  n <- length(x)
+  data <- data.frame(x=x,
+                     y=y,
+                     scale = scale,
+                     ratioxy = ratioxy,
+                     angleofspine = runif(n, - pi/2 - pi/3, -pi/2 + pi/3),
+                     anglerighthumerus = runif(n, -pi/6- pi/10, - pi/6 + pi/10),
+                     anglelefthumerus = runif(n, pi + pi/6 -pi/10, pi + pi/6 + pi/10),
+                     anglerightradius =  runif(n, -pi/4, pi/4),
+                     angleleftradius =  runif(n, pi -pi/4, pi + pi/4),
+                     anglerightleg = runif(n,  3* pi/2 + pi/12 , 3* pi/2  + pi/12 + pi/10),
+                     angleleftleg = runif(n, 3* pi/2  - pi/12 - pi/10, 3* pi/2 - pi/12 ),
+                     angleofneck = runif(n, -pi/2-pi/10, -pi/2 + pi/10))
+  xkcdman(mapping,data,...)
+}
+set.seed(123)
+x <- c(-1.5,1.5)
+y <- c(3,3)
+a <- ggplot() + plotmen(x,y,4,ratioxy)
+library(grid)
+p <- a +  theme(
+     line =               element_blank(),
+     rect =               element_blank(),
+     text =               element_blank(),
+     axis.ticks.length =  unit(0, "cm"),
+     axis.ticks.margin =  unit(0.01, "cm"), # change back to 0 when grid is fixed
+     legend.position =    "none",
+     panel.margin =       unit(0, "lines"),
+     plot.margin =        unit(c(0, 0, -.5, -.5), "lines"),
+     complete = TRUE
+   ) ## theme_nothing()
+p
+@ 
+
+\end{center}
+\tableofcontents
+
+\section{The XKCD fonts}
+
+The package \texttt{xkcd} uses the XKCD fonts. Therefore, an easy way to check whether this fonts are installed in the computer is typing the following code and comparing the graphs:
+
+\begin{center}
+<<fig=TRUE>>=
+library(extrafont)
+library(ggplot2)
+if( "xkcd" %in% fonts()) {
+p <-  ggplot() + geom_point(aes(x=mpg, y=wt), data=mtcars) + 
+  theme(text = element_text(size = 16, family = "xkcd"))
+} else  {
+warning("Not xkcd fonts installed!")
+p <-  ggplot() + geom_point(aes(x=mpg, y=wt), data=mtcars) 
+}
+p
+@ 
+\end{center}
+
+\subsection*{Installing fonts in R}
+
+
+
+If the XKCD fonts, or other fonts, are not installed in the system, you may follow the tutorial 
+\href{http://fibosworld.wordpress.com/2013/02/17/change-fonts-in-ggplot2-and-create-xkcd-style-graphs/}{\textit{Change fonts in ggplot2, and create xkcd style graphs}}
+to install them. 
+
+Or read the documentation of the package \texttt{extrafont}, with detailed instructions in \url{https://github.com/wch/extrafont}: 
+\begin{itemize}
+    \item Option I:
+<<eval=FALSE>>=
+## Borrowed from
+## fibosworld 2013. Change fonts in ggplot2, and create xkcd style graphs 
+library(extrafont)
+if(! "xkcd" %in% fonts()) {
+  xkcdFontURL <- "http://simonsoftware.se/other/xkcd.ttf"
+  download.file(xkcdFontURL,dest="xkcd.ttf")
+  font_import(".")   ## because we downloaded to working directory
+  loadfonts()
+}
+@ 
+    \item Option II. The first option does not work for me (on a Linux machine). I installed the fonts in this way:
+<<eval=FALSE>>=
+library(extrafont)
+download.file("http://simonsoftware.se/other/xkcd.ttf", dest="xkcd.ttf")
+system("mkdir ~/.fonts")
+system("cp xkcd.tff -t ~/.fonts")
+library(extrafont)
+font_import()
+loadfonts()
+@ 
+\end{itemize}
+
+
+If you want to uninstall the fonts, you may remove the following packages:
+<<eval=FALSE>>=
+remove.packages(c("extrafonts","extrafontdb"))
+@ 
+
+
+\section{Installing xkcd}
+
+The xkcd homepage is located at \url{http://xkcd.r-forge.r-project.org}. 
+From within R, you can install the latest version of xkcd by typing 
+<<eval=FALSE>>=
+install.packages("xkcd",dependencies = TRUE)
+@ 
+
+Then, you may want to see the vignette and check the code:
+<<eval=FALSE>>=
+help(package="xkcd")
+vignette("xkcd-intro") # it opens the pdf
+browseVignettes(package = "xkcd") # To browse the pdf, R and Rnw
+@ 
+
+Once the package has been installed, it can be loaded by typing:
+
+<<>>=
+library(xkcd)
+@
+
+
+\section{Axis}
+
+
+
+
+\begin{center}
+    Man: No, I just think I can do better than someone who doesn't label her axes. Title text: And if you labeled your axes, I could tell you exactly how MUCH better.  {\tiny
+    \url{http://xkcd.com/833/}
+    \url{http://imgs.xkcd.com/comics/convincing.png}}
+    
+    \includegraphics[width=0.7\textwidth]{convincing}
+
+   
+\end{center}
+
+
+
+
+
+
+\begin{center}
+<<fig = TRUE>>=
+xrange <- range(mtcars$mpg)
+yrange <- range(mtcars$wt)
+set.seed(123) # for reproducibility
+p <- ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
+  xkcdaxis(xrange,yrange)
+p
+@ 
+\end{center}
+
+
+
+\section{Cartoon characters}
+
+To include cartoon characters in the graph, use the \texttt{xkcdman} function.
+
+\begin{center}
+<<fig=TRUE>>=
+ratioxy <- diff(xrange)/diff(yrange)
+mapping <- aes(x,  y,
+               scale,
+               ratioxy,
+               angleofspine ,
+               anglerighthumerus,
+               anglelefthumerus,
+               anglerightradius,
+               angleleftradius,
+               anglerightleg,
+               angleleftleg,
+               angleofneck,
+               linetype=city)
+
+dataman <- data.frame(x= c(15,30), y=c(3, 4),
+                      scale = c(0.3,0.51) ,
+                      ratioxy = ratioxy,
+                      angleofspine =  -pi/2  ,
+                      anglerighthumerus = c(pi/4, -pi/6),
+                      anglelefthumerus = c(pi/2 + pi/4, pi +pi/6),
+                      anglerightradius = c(pi/3, -pi/3),
+                      angleleftradius = c(pi/3, -pi/3),
+                      anglerightleg = 3*pi/2  - pi / 12,
+                      angleleftleg = 3*pi/2  + pi / 12 ,
+                      angleofneck = runif(1, 3*pi/2-pi/10, 3*pi/2+pi/10),
+                      city=c("Liliput","Brobdingnag"))
+
+q <- ggplot() + geom_point(aes(mpg, wt, colour=as.character(vs)), data=mtcars) + 
+  xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman)
+q
+@ 
+\end{center}
+
+\subsection{Facets}
+
+\begin{center}
+<<facetvs,fig=TRUE, png=TRUE, pdf=FALSE, eps=FALSE, center = TRUE>>=
+    ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
+    xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman) +
+    facet_grid(.~vs)
+@ 
+\end{center}
+
+
+\begin{center}
+<<facetcity,fig=TRUE, png=TRUE, pdf=FALSE, eps=FALSE, center = TRUE>>=
+    ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
+    xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman) +
+    facet_grid(.~city)
+@ 
+\end{center}
+
+
+\subsection{Angles of the xkcdman}
+
+\begin{center}
+<<angles,fig=TRUE,echo=FALSE>>=
+library(grid)
+
+plotangle <- function(point,radius,angle,text,...) {
+  x <- point[,1]
+  y <- point[,2]
+  xbegin <- x
+  ybegin <- y
+  xendr1 <- x + radius *cos(angle)
+  yendr1 <- y
+  xendr2 <- x 
+  yendr2 <- y - radius
+  xendr3 <- x + (radius) *cos(angle)
+  yendr3 <- y + (radius) * sin(angle)
+  n <- 16
+  t <- seq(0,angle, length.out=n)
+  dataangle <- data.frame(x= x + (radius) *cos(t), y= y + radius*sin(t) )
+  langle <- geom_path(aes(x,y),dataangle, linetype=2, colour="green")
+  recth <- xkcdline(aes(xbegin=xbegin, ybegin=ybegin, xend=xend, yend=yend ),
+                    data.frame(xbegin=xbegin,ybegin=ybegin, xend= xbegin + 1.1*radius, yend=ybegin),
+                    mask=FALSE,linetype=2, colour="green")
+  rectv <- xkcdline(aes(xbegin=xbegin, ybegin=ybegin, xend=xend, yend=yend ),
+                    data.frame(xbegin=xbegin,ybegin=ybegin, xend= xendr3, yend=yendr3),
+                    mask=FALSE,linetype=2, colour="green")
+  xenda <- x + 1.05*radius * cos(angle/2)
+  yenda <- x + 1.05*radius * sin(angle/2)
+  if( "xkcd" %in% fonts()) {
+    atext <- annotate("text", x = x + 1.01*radius, y=y,label=text,colour="red", family="xkcd")
+  } else {    atext <- annotate("text", x = x + 1.01*radius, y=y,label=text,colour="red")}
+  list( langle , recth , rectv, atext)
+}
+
+
+ratioxy <- 1
+mapping <- aes(x,  y,
+               scale,
+               ratioxy,
+               angleofspine ,
+               anglerighthumerus,
+               anglelefthumerus,
+               anglerightradius,
+               angleleftradius,
+               anglerightleg,
+               angleleftleg,
+               angleofneck)
+data <- data.frame(x= 0, y=0,
+                   scale = 2 ,
+                   ratioxy = ratioxy,
+                   angleofspine =  -pi/2  ,
+                   anglerighthumerus =  -pi/6,
+                   anglelefthumerus =  pi +pi/6,
+                   anglerightradius =  -pi/3,
+                   angleleftradius =  -pi/3,
+                   anglerightleg = 3*pi/2  - pi / 12,
+                   angleleftleg = 3*pi/2  + pi / 12 ,
+                   angleofneck =  3*pi/2-pi/10)
+centerofhead <- cbind(data$x,data$y)
+diameterofhead <- data$scale
+lengthofspine <- diameterofhead
+lengthofleg <- lengthofspine * 1.2
+lengthofhumerus <- lengthofspine * 0.6
+lengthofradius <- lengthofspine * 0.5
+beginspine <- centerofhead + (diameterofhead/2) * 
+  cbind(cos(data$angleofneck) * 
+        data$ratioxy, sin(data$angleofneck))
+endspine <- beginspine + lengthofspine * cbind(cos(data$angleofspine) * 
+data$ratioxy, sin(data$angleofspine))
+endrighthumerus <- beginspine + lengthofhumerus * 
+  cbind(cos(data$anglerighthumerus) * 
+        data$ratioxy, sin(data$anglerighthumerus))
+endlefthumerus <- beginspine + lengthofhumerus * 
+  cbind(cos(data$anglelefthumerus) * 
+        data$ratioxy, sin(data$anglelefthumerus))
+set.seed(123)
+man <- xkcdman(mapping,data,colour="yellow")
+p <- ggplot() + man + 
+  plotangle(centerofhead,1.1*diameterofhead/2,data$angleofneck,"Neck") +
+  plotangle(beginspine,0.25*lengthofspine,data$angleofspine,"Spine") +
+  plotangle(endspine,0.25*lengthofspine,data$anglerightleg,"Leg") +
+  plotangle(beginspine,0.75*lengthofhumerus,data$anglerighthumerus,"Humerus") +
+  plotangle(endrighthumerus,0.75*lengthofradius,data$anglerightradius,"Radius") +
+  theme(
+        line =               element_blank(),
+        rect =               element_blank(),
+        text =               element_blank(),
+        axis.ticks.length =  unit(0, "cm"),
+        axis.ticks.margin =  unit(0.01, "cm"), # change back to 0 when grid is fixed
+        legend.position =    "none",
+        panel.margin =       unit(0, "lines"),
+        plot.margin =        unit(c(0, 0, -.5, -.5), "lines"),
+        complete = TRUE
+        ) 
+
+if("xkcd" %in% fonts()) {
+  p <-  p + annotate("text", x = 1, y=-4,label="Angles",colour="red", family="xkcd",size=16)
+  } else {
+   p <-  p + annotate("text", x = 1, y=-4,label="Angles",colour="red",size=16)
+ } 
+p
+@
+\end{center}
+
+\section{Mother's day}
+
+\subsection{Bar chart}
+
+\begin{center}
+<<motherday,fig=TRUE,center=TRUE>>=
+mommy <- read.table(sep=" ",text ="
+8 100
+9 0
+10 0
+11 0
+12 0
+13 0
+14 100
+15 100
+16 500
+17 420
+18 75
+19 50
+20 100
+21 40
+22 0
+")
+names(mommy) <- c("hour","number")
+data <- mommy
+data$xmin <- data$hour - 0.25
+data$xmax <- data$xmin + 1
+data$ymin <- 0
+data$ymax <- data$number
+xrange <- range(8, 24)
+yrange <- range(min(data$ymin) + 10 , max(data$ymax) + 200)
+ratioxy <- diff(xrange)/diff(yrange)
+timelabel <-  function(text,x,y) {
+  if( "xkcd" %in% fonts()) {
+    te1 <- annotate("text", x=x, y = y + 65, label=text, size = 6,family ="xkcd")
+  } else {
+    te1 <- annotate("text", x=x, y = y + 65, label=text, size = 6)}
+  list(te1,
+  xkcdline(aes(xbegin=xbegin, ybegin= ybegin, xend=xend,yend=yend),
+           data.frame(xbegin=x,ybegin= y + 50, xend=x,yend=y), xjitteramount = 0.5))
+  }
+n <- 1800
+set.seed(123)
+x <- runif(n, xrange[1],xrange[2] )
+y <- runif(n, yrange[1],yrange[2] )
+inside <- unlist(lapply(1:n, function(i) any(data$xmin <= x[i] & x[i] < data$xmax &
+                            data$ymin <= y[i] & y[i] < data$ymax)))
+x <- x[inside]
+y <- y[inside]
+nman <- length(x)
+sizer <- round(runif(nman, 1, 10),0)
+angler <- runif(nman, -10,10)
+if( "xkcd" %in% fonts()) {
+p <- ggplot() +
+  geom_text(aes(x,y,label="Mummy",angle=angler,hjust=0, vjust=0),
+            family="xkcd",size=sizer,alpha=0.3) +
+  xkcdaxis(xrange,yrange) +
+  annotate("text", x=16, y = 650,
+           label="Happy Mother's day", size = 16,family ="xkcd") +
+  xlab("daily schedule") +
+  ylab("Number of times mothers are called on by their children") +
+  timelabel("Wake up", 9, 125) + timelabel("School", 12.5, 90) +
+  timelabel("Lunch", 15, 130) +
+  timelabel("Homework", 18, 525) +
+  timelabel("Bath", 21, 110) +
+  timelabel("zzz", 23.5, 60)
+} else {
+p <- ggplot() +
+  geom_text(aes(x,y,label="Mummy",angle=angler,hjust=0, vjust=0),
+            size=sizer,alpha=0.3) +
+  xkcdaxis(xrange,yrange) +
+  annotate("text", x=16, y = 650,
+           label="Happy Mother's day", size = 16) +
+  xlab("daily schedule") +
+  ylab("Number of times mothers are called on by their children") +
+  timelabel("Wake up", 9, 125) + timelabel("School", 12.5, 90) +
+  timelabel("Lunch", 15, 130) +
+  timelabel("Homework", 18, 525) +
+  timelabel("Bath", 21, 110) +
+  timelabel("zzz", 23.5, 60)}
+
+p
+
+@ 
+
+\end{center}
+\section{Volunteers at C\'aritas Spain}
+
+\subsection{Scatterplot}
+
+\begin{center}
+<<fig=TRUE>>=
+volunteers <- data.frame(year=c(2007:2011), number=c(56470, 56998, 59686, 61783, 64251))
+xrange <- range(volunteers$year)
+yrange <- range(volunteers$number)
+ratioxy <-  diff(xrange) / diff(yrange)
+
+mapping <- aes(x,  y,
+               scale,
+               ratioxy,
+               angleofspine ,
+               anglerighthumerus,
+               anglelefthumerus,
+               anglerightradius,
+               angleleftradius,
+               anglerightleg,
+               angleleftleg,
+               angleofneck)
+
+dataman <- data.frame( x= c(2008,2010), y=c(63000, 58850),
+                      scale = 1000 ,
+                      ratioxy = ratioxy,
+                      angleofspine =  -pi/2  ,
+                      anglerighthumerus = c(-pi/6, -pi/6),
+                      anglelefthumerus = c(-pi/2 - pi/6, -pi/2 - pi/6),
+                      anglerightradius = c(pi/5, -pi/5),
+                      angleleftradius = c(pi/5, -pi/5),
+                      angleleftleg = 3*pi/2  + pi / 12 ,
+                      anglerightleg = 3*pi/2  - pi / 12,
+                      angleofneck = runif(1, 3*pi/2-pi/10, 3*pi/2+pi/10))
+
+
+datalines <- data.frame(xbegin=c(2008.3,2010.5),ybegin=c(63000,59600), 
+                        xend=c(2008.5,2010.3), yend=c(63400,59000))
+
+p <- ggplot() + geom_smooth(mapping=aes(x=year, y =number), data =volunteers,method="loess")
+if( "xkcd" %in% fonts()) {
+p + xkcdaxis(xrange,yrange) +
+  ylab("Volunteers at Caritas Spain") +
+  xkcdman(mapping, dataman) +
+  annotate("text", x=2008.7, y = 63700, label = "We Need\nVolunteers!", family="xkcd" ) +
+  annotate("text", x=2010.5, y = 60000, label = "Sure\nI can!", family="xkcd" ) +
+ xkcdline(aes(xbegin=xbegin,ybegin=ybegin,xend=xend,yend=yend),datalines, xjitteramount = 0.12) 
+} else {
+p + xkcdaxis(xrange,yrange) +
+  ylab("Volunteers at Caritas Spain") +
+  xkcdman(mapping, dataman) +
+  annotate("text", x=2008.7, y = 63700, label = "We Need\nVolunteers!") +
+  annotate("text", x=2010.5, y = 60000, label = "Sure\nI can!") +
+ xkcdline(aes(xbegin=xbegin,ybegin=ybegin,xend=xend,yend=yend),datalines, xjitteramount = 0.12) 
+}
+@ 
+\end{center}
+
+\subsection{Bar chart}
+
+\begin{center}
+    
+<<fig=TRUE>>=
+data <- volunteers
+data$xmin <- data$year - 0.1
+data$xmax <- data$year + 0.1
+data$ymin <- 50000
+data$ymax <- data$number
+xrange <- range(min(data$xmin)-0.1, max(data$xmax) + 0.1)
+yrange <- range(min(data$ymin)+500, max(data$ymax) + 1000)
+
+mapping <- aes(xmin=xmin,ymin=ymin,xmax=xmax,ymax=ymax)
+p <- ggplot() + xkcdrect(mapping,data) + 
+  xkcdaxis(xrange,yrange) +
+  xlab("Year") + ylab("Volunteers at Caritas Spain")
+p
+@ 
+
+\subsection{Bar chart}
+
+<<CaritasSpain,fig=TRUE,eval=TRUE>>=
+
+data <- volunteers
+data$xmin <- data$year - 0.1
+data$xmax <- data$year + 0.1
+data$ymin <- 50000
+data$ymax <- data$number
+xrange <- range(min(data$xmin) - 0.1, max(data$xmax) + 0.1)
+yrange <- range(min(data$ymin) +500 , max(data$ymax) + 1000)
+ratioxy <- diff(xrange)/diff(yrange)
+plotmen <- function(x,y, scale,ratioxy,...){
+ mapping <- aes(x,  y,
+                 scale,
+                 ratioxy,
+                 angleofspine ,
+                 anglerighthumerus,
+                 anglelefthumerus,
+                 anglerightradius,
+                 angleleftradius,
+                 anglerightleg,
+                 angleleftleg,
+                 angleofneck)
+  n <- length(x)
+  data <- data.frame(x=x,
+                     y=y,
+                     scale = scale,
+                     ratioxy = ratioxy,
+                     angleofspine = runif(n, - pi/2 - pi/3, -pi/2 + pi/3),
+                     anglerighthumerus = runif(n, -pi/6- pi/10, - pi/6 + pi/10),
+                     anglelefthumerus = runif(n, pi + pi/6 -pi/10, pi + pi/6 + pi/10),
+                     anglerightradius =  runif(n, -pi/4, pi/4),
+                     angleleftradius =  runif(n, pi -pi/4, pi + pi/4),
+                     anglerightleg = runif(n,  3* pi/2 + pi/12 , 3* pi/2  + pi/12 + pi/10),
+                     angleleftleg = runif(n, 3* pi/2  - pi/12 - pi/10, 3* pi/2 - pi/12 ),
+                     angleofneck = runif(n, -pi/2-pi/10, -pi/2 + pi/10))
+  xkcdman(mapping,data,...)
+}
+volun <- c("Miguel","Jose","Rocio","Maria","Emilio",
+           "Pilar","Tata","Violeta","Titi","Alex","Dani")
+positionx <- seq(2007,2011, length.out=length(volun))
+set.seed(123)
+positionx <- positionx[sample(1:length(volun),length(volun))]
+positiony <- seq(54000,65000,length.out = length(volun))
+
+a <- ggplot() + 
+  xkcdrect(mapping,data,fill="yellow",colour="red") + 
+  xkcdaxis(xrange,yrange) +
+  xlab("Year") + ylab("Volunteers at Caritas Spain")
+b <- a + plotmen(positionx, positiony,1000, ratioxy) 
+if( "xkcd" %in% fonts()) {
+c <- b + annotate("text", 
+                  x= positionx, y= positiony, 
+                  label=volun, family="xkcd",size=3) 
+} else {
+c <- b + annotate("text", 
+                  x= positionx, y= positiony, 
+                  label=volun,size=3) 
+}
+c
+@ 
+\end{center}
+
+\section{Saving the graphs}
+
+\subsection{png}
+
+<<eval=FALSE>>=
+png("myfigure.png")
+print(p)
+dev.off()
+@ 
+
+\subsection{pdf}
+
+Remember to embed the fonts!
+
+<<eval= FALSE>>=
+
+## Borrowed from
+## fibosworld 2013. Change fonts in ggplot2, and create xkcd style graphs 
+## \url{http://fibosworld.wordpress.com/2013/02/17/change-fonts-in-ggplot2-and-create-xkcd-style-graphs/}
+
+ggsave("font_ggplot.pdf", plot=p,  width=12, height=4)
+## needed for Windows - make sure YOU have the correct path for your machine:
+## Sys.setenv(R_GSCMD = "C:\\Program Files (x86)\\gs\\gs9.06\\bin\\gswin32c.exe")
+embed_fonts("font_ggplot.pdf")
+@ 
+
+
+\section{References}
+
+
+    Hadley Wickham 2012. ggplot2 \url{http://ggplot2.org/}
+    
+    Randall Munroe. A webcomic of romance, sarcasm, math, and language
+    \url{http://xkcd.com/}
+
+    Various Authors 2012. How can we make xkcd style graphs in R? \url{http://stackoverflow.com/questions/12675147/how-can-we-make-xkcd-style-graphs-in-r}
+
+    fibosworld 2013. Change fonts in ggplot2, and create xkcd style graphs \url{http://fibosworld.wordpress.com/2013/02/17/change-fonts-in-ggplot2-and-create-xkcd-style-graphs/}
+
+    Winston Chang. extrafont \url{https://github.com/wch/extrafont}
+\end{document}
+
+
+<<echo=FALSE, eval=FALSE,results=hide>>=
+
+require(tools)
+
+
+## texi2dvi("xkcd-intro.tex", pdf = TRUE)
+## embed_fonts("xkcd-intro.pdf")
+
+@

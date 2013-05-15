@@ -1,0 +1,5 @@
+exportPattern("^[[:alpha:]]+")
+importFrom(Hmisc, bezier)
+importFrom(ggplot2, aes, geom_path)
+
+
