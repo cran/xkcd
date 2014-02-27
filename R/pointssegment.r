@@ -1,11 +1,11 @@
 # Emilio Torres Manzanera
 # University of Oviedo
-# Time-stamp: <2013-05-03 Fri 20:19 emilio on emilio-laptop2>
+# Time-stamp: <2014-02-27 jue 16:10 emilio on emilio-Satellite-P100>
 # =====================================================================
 
 
 pointssegment <- function(xbegin, ybegin, xend, yend, npoints = 10, xjitteramount= 0, yjitteramount=0, bezier = TRUE) {
-  require(Hmisc) # bezier
+  ##require(Hmisc) # bezier
   if(npoints < 2 )
     stop("npoints must be greater than 1")
   ## If there are no jitters, do not interpolate

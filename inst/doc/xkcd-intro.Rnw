@@ -1,7 +1,7 @@
 %% -*- ispell-local-dictionary: "british" -*-
 %% Emilio Torres Manzanera
 %% University of Oviedo
-%% Time-stamp: <2013-05-15 Wed 09:45 emilio on emilio-despacho>
+%% Time-stamp: <2014-02-27 jue 18:47 emilio on emilio-Satellite-P100>
 %% =====================================================================
 % \VignetteIndexEntry{Graphs in XKCD style}
 % \VignettePackage{picante}
@@ -10,6 +10,15 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{hyperref}
+\usepackage[utf8]{inputenc}     % Linux
+% \usepackage[activeacute,spanish]{babel} % Spanishs titles
+% \usepackage{fouriernc}          % Type of font
+\usepackage[T1]{fontenc} 
+\usepackage{fancybox,fancyvrb,calc} % first, fancybox, and then, fancyvrb
+\usepackage{Sweave}% After fancybox!!!
+\SweaveOpts{eval=FALSE}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{fontshape=sl, xleftmargin=-3em, fontsize=\small,gobble=2,numbers=left}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=-2.5em, fontsize=\small,formatcom=\color{azulpautipografia},numbers=left,stepnumber=3}
 
 % See 
 % Customizing Sweave to Produce A Better Looking LaTEX Output
@@ -22,8 +31,8 @@
 
 
 \title{An introduction to the xkcd package}
-\author{Emilio Torres Manzanera\\ (torres@uniovi.es)}
-\date{May 2013}
+\author{Emilio Torres-Manzanera\\ (torres@uniovi.es)}
+\date{February 2014}
 
 \begin{document}
 \SweaveOpts{strip.white=true}
@@ -35,7 +44,7 @@
 
 <<echo=FALSE>>=
 options(width=60)
-options(continue=" ") # To avoid the insidious + at the begining of the line
+##options(continue=" ") # To avoid the insidious + at the begining of the line
 @
 
 \maketitle
@@ -99,20 +108,26 @@ p
 \end{center}
 \tableofcontents
 
+\bigskip
+
+See more examples at \url{http://xkcd.r-forge.r-project.org/}.
+
 \section{The XKCD fonts}
 
 The package \texttt{xkcd} uses the XKCD fonts. Therefore, an easy way to check whether this fonts are installed in the computer is typing the following code and comparing the graphs:
 
+
 \begin{center}
-<<fig=TRUE>>=
-library(extrafont)
+<<fig= TRUE>>=
+library(sysfonts)
 library(ggplot2)
-if( "xkcd" %in% fonts()) {
-p <-  ggplot() + geom_point(aes(x=mpg, y=wt), data=mtcars) + 
-  theme(text = element_text(size = 16, family = "xkcd"))
+if( "xkcd.ttf" %in% font.files()) {
+  font.add("xkcd",  regular = "xkcd.ttf")
+  p <-  ggplot() + geom_point(aes(x=mpg, y=wt), data=mtcars) + 
+    theme(text = element_text(size = 16, family = "xkcd"))
 } else  {
-warning("Not xkcd fonts installed!")
-p <-  ggplot() + geom_point(aes(x=mpg, y=wt), data=mtcars) 
+  warning("Not xkcd fonts installed!")
+  p <-  ggplot() + geom_point(aes(x=mpg, y=wt), data=mtcars) 
 }
 p
 @ 
@@ -122,41 +137,19 @@ p
 
 
 
-If the XKCD fonts, or other fonts, are not installed in the system, you may follow the tutorial 
-\href{http://fibosworld.wordpress.com/2013/02/17/change-fonts-in-ggplot2-and-create-xkcd-style-graphs/}{\textit{Change fonts in ggplot2, and create xkcd style graphs}}
-to install them. 
+The XKCD fonts are not installed in the system. You can use package \texttt{sysfonts}, and the functions \texttt{font.paths()} to check the current search path or add a new one, and use \texttt{font.files()} to list available font files in the search path.
 
-Or read the documentation of the package \texttt{extrafont}, with detailed instructions in \url{https://github.com/wch/extrafont}: 
-\begin{itemize}
-    \item Option I:
 <<eval=FALSE>>=
-## Borrowed from
-## fibosworld 2013. Change fonts in ggplot2, and create xkcd style graphs 
-library(extrafont)
-if(! "xkcd" %in% fonts()) {
-  xkcdFontURL <- "http://simonsoftware.se/other/xkcd.ttf"
-  download.file(xkcdFontURL,dest="xkcd.ttf")
-  font_import(".")   ## because we downloaded to working directory
-  loadfonts()
-}
-@ 
-    \item Option II. The first option does not work for me (on a Linux machine). I installed the fonts in this way:
-<<eval=FALSE>>=
-library(extrafont)
-download.file("http://simonsoftware.se/other/xkcd.ttf", dest="xkcd.ttf")
+library(sysfonts)
+download.file("http://simonsoftware.se/other/xkcd.ttf", dest="xkcd.ttf", mode="wb")
+font.paths()
 system("mkdir ~/.fonts")
 system("cp xkcd.tff -t ~/.fonts")
-library(extrafont)
-font_import()
-loadfonts()
+font.files()
+font.add("xkcd",  regular = "xkcd.ttf")
+font.families()
 @ 
-\end{itemize}
 
-
-If you want to uninstall the fonts, you may remove the following packages:
-<<eval=FALSE>>=
-remove.packages(c("extrafonts","extrafontdb"))
-@ 
 
 
 \section{Installing xkcd}
@@ -257,18 +250,18 @@ q
 
 \begin{center}
 <<facetvs,fig=TRUE, png=TRUE, pdf=FALSE, eps=FALSE, center = TRUE>>=
-    ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
-    xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman) +
-    facet_grid(.~vs)
+ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
+  xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman) +
+  facet_grid(.~vs)
 @ 
 \end{center}
 
 
 \begin{center}
 <<facetcity,fig=TRUE, png=TRUE, pdf=FALSE, eps=FALSE, center = TRUE>>=
-    ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
-    xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman) +
-    facet_grid(.~city)
+ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
+  xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman) +
+  facet_grid(.~city)
 @ 
 \end{center}
 
@@ -302,12 +295,12 @@ plotangle <- function(point,radius,angle,text,...) {
                     mask=FALSE,linetype=2, colour="green")
   xenda <- x + 1.05*radius * cos(angle/2)
   yenda <- x + 1.05*radius * sin(angle/2)
-  if( "xkcd" %in% fonts()) {
-    atext <- annotate("text", x = x + 1.01*radius, y=y,label=text,colour="red", family="xkcd")
-  } else {    atext <- annotate("text", x = x + 1.01*radius, y=y,label=text,colour="red")}
+  if( "xkcd" %in% font.families()) {
+     atext <- annotate("text", x = x + 1.01*radius, y=y,label=text,colour="red", family="xkcd")
+   } else {    atext <- annotate("text", x = x + 1.01*radius, y=y,label=text,colour="red")}
+  atext <- annotate("text", x = x + 1.01*radius, y=y,label=text,colour="red")
   list( langle , recth , rectv, atext)
 }
-
 
 ratioxy <- 1
 mapping <- aes(x,  y,
@@ -368,12 +361,11 @@ p <- ggplot() + man +
         plot.margin =        unit(c(0, 0, -.5, -.5), "lines"),
         complete = TRUE
         ) 
-
-if("xkcd" %in% fonts()) {
+if( "xkcd" %in% font.families()){
   p <-  p + annotate("text", x = 1, y=-4,label="Angles",colour="red", family="xkcd",size=16)
-  } else {
-   p <-  p + annotate("text", x = 1, y=-4,label="Angles",colour="red",size=16)
- } 
+} else {
+  p <-  p + annotate("text", x = 1, y=-4,label="Angles",colour="red",size=16)
+} 
 p
 @
 \end{center}
@@ -411,7 +403,7 @@ xrange <- range(8, 24)
 yrange <- range(min(data$ymin) + 10 , max(data$ymax) + 200)
 ratioxy <- diff(xrange)/diff(yrange)
 timelabel <-  function(text,x,y) {
-  if( "xkcd" %in% fonts()) {
+  if( "xkcd" %in% font.families()){
     te1 <- annotate("text", x=x, y = y + 65, label=text, size = 6,family ="xkcd")
   } else {
     te1 <- annotate("text", x=x, y = y + 65, label=text, size = 6)}
@@ -430,7 +422,7 @@ y <- y[inside]
 nman <- length(x)
 sizer <- round(runif(nman, 1, 10),0)
 angler <- runif(nman, -10,10)
-if( "xkcd" %in% fonts()) {
+if( "xkcd" %in% font.families()){
 p <- ggplot() +
   geom_text(aes(x,y,label="Mummy",angle=angler,hjust=0, vjust=0),
             family="xkcd",size=sizer,alpha=0.3) +
@@ -458,9 +450,7 @@ p <- ggplot() +
   timelabel("Homework", 18, 525) +
   timelabel("Bath", 21, 110) +
   timelabel("zzz", 23.5, 60)}
-
 p
-
 @ 
 
 \end{center}
@@ -499,12 +489,11 @@ dataman <- data.frame( x= c(2008,2010), y=c(63000, 58850),
                       anglerightleg = 3*pi/2  - pi / 12,
                       angleofneck = runif(1, 3*pi/2-pi/10, 3*pi/2+pi/10))
 
-
 datalines <- data.frame(xbegin=c(2008.3,2010.5),ybegin=c(63000,59600), 
                         xend=c(2008.5,2010.3), yend=c(63400,59000))
 
 p <- ggplot() + geom_smooth(mapping=aes(x=year, y =number), data =volunteers,method="loess")
-if( "xkcd" %in% fonts()) {
+if( "xkcd" %in% font.families()){
 p + xkcdaxis(xrange,yrange) +
   ylab("Volunteers at Caritas Spain") +
   xkcdman(mapping, dataman) +
@@ -544,7 +533,7 @@ p
 
 \subsection{Bar chart}
 
-<<CaritasSpain,fig=TRUE,eval=TRUE>>=
+<<CaritasSpain,fig=TRUE>>=
 
 data <- volunteers
 data$xmin <- data$year - 0.1
@@ -593,7 +582,7 @@ a <- ggplot() +
   xkcdaxis(xrange,yrange) +
   xlab("Year") + ylab("Volunteers at Caritas Spain")
 b <- a + plotmen(positionx, positiony,1000, ratioxy) 
-if( "xkcd" %in% fonts()) {
+if( "xkcd" %in% font.families()){
 c <- b + annotate("text", 
                   x= positionx, y= positiony, 
                   label=volun, family="xkcd",size=3) 
@@ -611,9 +600,7 @@ c
 \subsection{png}
 
 <<eval=FALSE>>=
-png("myfigure.png")
-print(p)
-dev.off()
+ggsave("fig.png")
 @ 
 
 \subsection{pdf}
@@ -622,14 +609,9 @@ Remember to embed the fonts!
 
 <<eval= FALSE>>=
 
-## Borrowed from
-## fibosworld 2013. Change fonts in ggplot2, and create xkcd style graphs 
-## \url{http://fibosworld.wordpress.com/2013/02/17/change-fonts-in-ggplot2-and-create-xkcd-style-graphs/}
 
 ggsave("font_ggplot.pdf", plot=p,  width=12, height=4)
-## needed for Windows - make sure YOU have the correct path for your machine:
-## Sys.setenv(R_GSCMD = "C:\\Program Files (x86)\\gs\\gs9.06\\bin\\gswin32c.exe")
-embed_fonts("font_ggplot.pdf")
+
 @ 
 
 
