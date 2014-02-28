@@ -36,22 +36,25 @@ A theme with white background and fonts of the XKCD family.
 % Emilio Torres Manzanera
 % }
 \note{
- To install the fonts:
+ To install the fonts (See the vignette):
   
 	download.file("http://simonsoftware.se/other/xkcd.ttf",
 	dest="xkcd.ttf")
 	system("mkdir ~/.fonts")
 	system("cp xkcd.tff -t ~/.fonts")
-	library(extrafont)
-	font_import()
+	##library(sysfonts)
+	font.add("xkcd",  regular = "xkcd.ttf")
+	
   
 }
 % \seealso{
 %   \code{\link[gpplot2]{aes_string}}
 % }
 \examples{
+\dontrun{ 
 p <- ggplot() + geom_point(aes(mpg, wt), data=mtcars) + theme_xkcd()
 p
+}
 }
 
 \keyword{ manip }

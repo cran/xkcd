@@ -46,17 +46,7 @@ A layer with the rectangles.
 % \author{
 % Emilio Torres Manzanera
 % }
-% \note{
-%  To install the fonts:
-  
-% 	download.file("http://simonsoftware.se/other/xkcd.ttf",
-% 	dest="xkcd.ttf")
-% 	system("mkdir ~/.fonts")
-% 	system("cp xkcd.tff -t ~/.fonts")
-% 	library(extrafont)
-% 	font_import()
-  
-% }
+
 \seealso{
   \code{\link[ggplot2]{geom_rect}}
 }
