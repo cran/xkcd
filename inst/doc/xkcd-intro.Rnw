@@ -1,7 +1,7 @@
 %% -*- ispell-local-dictionary: "british" -*-
 %% Emilio Torres Manzanera
 %% University of Oviedo
-%% Time-stamp: <2014-02-27 jue 18:47 emilio on emilio-Satellite-P100>
+%% Time-stamp: <2014-03-05 mié 07:02 emilio on emilio-Satellite-P100>
 %% =====================================================================
 % \VignetteIndexEntry{Graphs in XKCD style}
 % \VignettePackage{picante}
@@ -32,7 +32,7 @@
 
 \title{An introduction to the xkcd package}
 \author{Emilio Torres-Manzanera\\ (torres@uniovi.es)}
-\date{February 2014}
+\date{March 2014}
 
 \begin{document}
 \SweaveOpts{strip.white=true}
@@ -109,6 +109,7 @@ p
 \tableofcontents
 
 \bigskip
+\section{Graph Gallery}
 
 See more examples at \url{http://xkcd.r-forge.r-project.org/}.
 
@@ -133,11 +134,11 @@ p
 @ 
 \end{center}
 
-\subsection*{Installing fonts in R}
+\subsection{Installing fonts in R}
 
 
 
-The XKCD fonts are not installed in the system. You can use package \texttt{sysfonts}, and the functions \texttt{font.paths()} to check the current search path or add a new one, and use \texttt{font.files()} to list available font files in the search path.
+The XKCD fonts are not installed in the system. You can use the package \texttt{sysfonts}, and the function \texttt{font.paths()} to check the current search path or add a new one, and use \texttt{font.files()} to list available font files in the search path.
 
 <<eval=FALSE>>=
 library(sysfonts)
@@ -149,6 +150,33 @@ font.files()
 font.add("xkcd",  regular = "xkcd.ttf")
 font.families()
 @ 
+
+
+
+\subsection{Saving the graphs}
+
+\subsubsection{png}
+
+<<eval=FALSE>>=
+font.add("xkcd",  regular = "xkcd.ttf")
+p <-  ggplot() + geom_point(aes(x=mpg, y=wt), data=mtcars) + 
+  theme(text = element_text(size = 16, family = "xkcd"))
+ggsave("fig.png", p)
+@ 
+
+\subsubsection{pdf}
+Yixuan Qiu, author of the packages \texttt{sysfonts} and \texttt{showtext}, provides an example of saving pdf plots:
+
+<<eval= FALSE>>=
+library(showtext)
+font.add("xkcd", "xkcd.ttf")
+pdf("showtext.pdf")
+showtext.begin()
+print(p)
+showtext.end()
+dev.off()
+@ 
+
 
 
 
@@ -595,24 +623,6 @@ c
 @ 
 \end{center}
 
-\section{Saving the graphs}
-
-\subsection{png}
-
-<<eval=FALSE>>=
-ggsave("fig.png")
-@ 
-
-\subsection{pdf}
-
-Remember to embed the fonts!
-
-<<eval= FALSE>>=
-
-
-ggsave("font_ggplot.pdf", plot=p,  width=12, height=4)
-
-@ 
 
 
 \section{References}
@@ -625,9 +635,12 @@ ggsave("font_ggplot.pdf", plot=p,  width=12, height=4)
 
     Various Authors 2012. How can we make xkcd style graphs in R? \url{http://stackoverflow.com/questions/12675147/how-can-we-make-xkcd-style-graphs-in-r}
 
-    fibosworld 2013. Change fonts in ggplot2, and create xkcd style graphs \url{http://fibosworld.wordpress.com/2013/02/17/change-fonts-in-ggplot2-and-create-xkcd-style-graphs/}
+    % fibosworld 2013. Change fonts in ggplot2, and create xkcd style graphs \url{http://fibosworld.wordpress.com/2013/02/17/change-fonts-in-ggplot2-and-create-xkcd-style-graphs/}
 
-    Winston Chang. extrafont \url{https://github.com/wch/extrafont}
+    Yixuan Qiu, 2014, sysfonts, \url{http://cran.r-project.org/web/packages/sysfonts/index.html}
+    
+    Yixuan Qiu, 2014, showtext, \url{http://cran.r-project.org/web/packages/showtext/index.html}
+    
 \end{document}
 
 

@@ -1,4 +1,4 @@
-b9bcc19ca53f22bb434041fbfef533fa *DESCRIPTION
+4b8bf6c27efc2c726dd84758f1caa79c *DESCRIPTION
 059a44379d60933e1e0010120a3c6736 *NAMESPACE
 e6d34f98a3478b3a3fca1c4b7e6b1857 *R/createdefaultmapping.r
 74483c2d01ec2dee7fe80d5abf3b1a3d *R/doforeachrow.r
@@ -10,10 +10,10 @@ ecdfa39b016204137603fe7fb8536aba *R/xkcdaxis.r
 ebb551c0ef005039e7b60ccff02a920f *R/xkcdline.r
 377a1ba1a5bfa03d18af0c9d7db76d41 *R/xkcdman.r
 35114f7c37463f623852ca048113c129 *R/xkcdrect.r
-d43e1a7268cedb9f48e242df8e43139f *build/vignette.rds
-2e5e0454a4852bce63adbd41bae437fb *inst/doc/xkcd-intro.R
-d5147d35871d0d8564b064f30658c64f *inst/doc/xkcd-intro.Rnw
-5b75169e5483b859bb67e5151183b71e *inst/doc/xkcd-intro.pdf
+6fd4d88ac8904093137983774d3bfa20 *build/vignette.rds
+803636ac46172394a1e4e8630b5b5af6 *inst/doc/xkcd-intro.R
+9b54459999c069b605062f9c44af49ef *inst/doc/xkcd-intro.Rnw
+a965ad03539d8a093d1427c20fbe9e7f *inst/doc/xkcd-intro.pdf
 96abf43099bee34b0140ac2e3cf79b07 *man/createdefaultmappinganddata.Rd
 736d0b7f0037dc3ed1a03f5a32c7c4af *man/doforeachrow.Rd
 01f278d53522f748bc84a98b093adcc5 *man/mappingjoin.Rd
@@ -26,4 +26,4 @@ c6403bf45b55434825dfdb8c63fd0dfa *man/xkcdaxis.Rd
 f19a2026178c91056709250c36897cbd *man/xkcdman.Rd
 1f5ae26d22f91e3433b7a6657d32cd43 *man/xkcdrect.Rd
 0cd89440eb9d3ada28c8cb936744f39f *vignettes/convincing.png
-d5147d35871d0d8564b064f30658c64f *vignettes/xkcd-intro.Rnw
+9b54459999c069b605062f9c44af49ef *vignettes/xkcd-intro.Rnw
