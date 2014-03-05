@@ -62,7 +62,7 @@
 
 
 ###################################################
-### code chunk number 3: xkcd-intro.Rnw:121-132 (eval = FALSE)
+### code chunk number 3: xkcd-intro.Rnw:122-133 (eval = FALSE)
 ###################################################
 ## library(sysfonts)
 ## library(ggplot2)
@@ -78,7 +78,7 @@
 
 
 ###################################################
-### code chunk number 4: xkcd-intro.Rnw:142-150 (eval = FALSE)
+### code chunk number 4: xkcd-intro.Rnw:143-151 (eval = FALSE)
 ###################################################
 ## library(sysfonts)
 ## download.file("http://simonsoftware.se/other/xkcd.ttf", dest="xkcd.ttf", mode="wb")
@@ -91,13 +91,34 @@
 
 
 ###################################################
-### code chunk number 5: xkcd-intro.Rnw:159-160 (eval = FALSE)
+### code chunk number 5: xkcd-intro.Rnw:160-164 (eval = FALSE)
+###################################################
+## font.add("xkcd",  regular = "xkcd.ttf")
+## p <-  ggplot() + geom_point(aes(x=mpg, y=wt), data=mtcars) + 
+##   theme(text = element_text(size = 16, family = "xkcd"))
+## ggsave("fig.png", p)
+
+
+###################################################
+### code chunk number 6: xkcd-intro.Rnw:170-177 (eval = FALSE)
+###################################################
+## library(showtext)
+## font.add("xkcd", "xkcd.ttf")
+## pdf("showtext.pdf")
+## showtext.begin()
+## print(p)
+## showtext.end()
+## dev.off()
+
+
+###################################################
+### code chunk number 7: xkcd-intro.Rnw:187-188 (eval = FALSE)
 ###################################################
 ## install.packages("xkcd",dependencies = TRUE)
 
 
 ###################################################
-### code chunk number 6: xkcd-intro.Rnw:164-167 (eval = FALSE)
+### code chunk number 8: xkcd-intro.Rnw:192-195 (eval = FALSE)
 ###################################################
 ## help(package="xkcd")
 ## vignette("xkcd-intro") # it opens the pdf
@@ -105,13 +126,13 @@
 
 
 ###################################################
-### code chunk number 7: xkcd-intro.Rnw:172-173 (eval = FALSE)
+### code chunk number 9: xkcd-intro.Rnw:200-201 (eval = FALSE)
 ###################################################
 ## library(xkcd)
 
 
 ###################################################
-### code chunk number 8: xkcd-intro.Rnw:198-204 (eval = FALSE)
+### code chunk number 10: xkcd-intro.Rnw:226-232 (eval = FALSE)
 ###################################################
 ## xrange <- range(mtcars$mpg)
 ## yrange <- range(mtcars$wt)
@@ -122,7 +143,7 @@
 
 
 ###################################################
-### code chunk number 9: xkcd-intro.Rnw:215-245 (eval = FALSE)
+### code chunk number 11: xkcd-intro.Rnw:243-273 (eval = FALSE)
 ###################################################
 ## ratioxy <- diff(xrange)/diff(yrange)
 ## mapping <- aes(x,  y,
@@ -157,7 +178,7 @@
 
 
 ###################################################
-### code chunk number 10: facetvs (eval = FALSE)
+### code chunk number 12: facetvs (eval = FALSE)
 ###################################################
 ## ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
 ##   xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman) +
@@ -165,7 +186,7 @@
 
 
 ###################################################
-### code chunk number 11: facetcity (eval = FALSE)
+### code chunk number 13: facetcity (eval = FALSE)
 ###################################################
 ## ggplot() + geom_point(aes(mpg, wt), data=mtcars) + 
 ##   xkcdaxis(xrange,yrange) + xkcdman(mapping, dataman) +
@@ -173,7 +194,7 @@
 
 
 ###################################################
-### code chunk number 12: angles (eval = FALSE)
+### code chunk number 14: angles (eval = FALSE)
 ###################################################
 ## library(grid)
 ## 
@@ -275,7 +296,7 @@
 
 
 ###################################################
-### code chunk number 13: motherday (eval = FALSE)
+### code chunk number 15: motherday (eval = FALSE)
 ###################################################
 ## mommy <- read.table(sep=" ",text ="
 ## 8 100
@@ -355,7 +376,7 @@
 
 
 ###################################################
-### code chunk number 14: xkcd-intro.Rnw:462-510 (eval = FALSE)
+### code chunk number 16: xkcd-intro.Rnw:490-538 (eval = FALSE)
 ###################################################
 ## volunteers <- data.frame(year=c(2007:2011), number=c(56470, 56998, 59686, 61783, 64251))
 ## xrange <- range(volunteers$year)
@@ -408,7 +429,7 @@
 
 
 ###################################################
-### code chunk number 15: xkcd-intro.Rnw:518-531 (eval = FALSE)
+### code chunk number 17: xkcd-intro.Rnw:546-559 (eval = FALSE)
 ###################################################
 ## data <- volunteers
 ## data$xmin <- data$year - 0.1
@@ -426,7 +447,7 @@
 
 
 ###################################################
-### code chunk number 16: CaritasSpain (eval = FALSE)
+### code chunk number 18: CaritasSpain (eval = FALSE)
 ###################################################
 ## 
 ## data <- volunteers
@@ -489,22 +510,7 @@
 
 
 ###################################################
-### code chunk number 17: xkcd-intro.Rnw:602-603 (eval = FALSE)
-###################################################
-## ggsave("fig.png")
-
-
-###################################################
-### code chunk number 18: xkcd-intro.Rnw:610-614 (eval = FALSE)
-###################################################
-## 
-## 
-## ggsave("font_ggplot.pdf", plot=p,  width=12, height=4)
-## 
-
-
-###################################################
-### code chunk number 19: xkcd-intro.Rnw:634-641 (eval = FALSE)
+### code chunk number 19: xkcd-intro.Rnw:647-654 (eval = FALSE)
 ###################################################
 ## 
 ## require(tools)
