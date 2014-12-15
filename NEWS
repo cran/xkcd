@@ -1,0 +1,54 @@
+# -*- mode: org ; ispell-local-dictionary: "british" -*-  
+
+* freqweights 1.0.1
+
+** Public
+
+- Major changes due to the dependencies on dplyr 0.3
+
+** Internal
+
+- Removed Missing link or links in documentation object 'evaldp.Rd': ‘[dplyr]{manip}’
+- Added drop in .lmfreq
+
+* freqweights 0.1.1
+
+- Solved the problem with the valgrind program in the test freqweights
+
+
+* freqweights 0.1.0
+
+- Now, it depends on dplyr 0.2
+
+
+* freqweights 0.0.2
+
+** Public
+
+- make.readchunk now try to guess the header, and option verifylastrecord are removed.
+- tablefreq also deal with external data bases and return a tbl object.
+- meanfreq, sdfreq and quantilefreq now accept matrix or tbl objects.
+- included scalefreq, to z-score a tablefreq.
+- nobs of lmfreq
+- by default, smartround standarizes  the data in order to make the groups.
+- Principal component analysis included.
+- Change NEWS to org mode
+
+** Intern
+
+- updated to r 3.1.0
+- Removed data.table::setnames
+- checkdatafreq returns a list: data and weights. This change affects to tablefreq.
+- tablfreq use the dplyr::count implementation
+- now, every function depend on tablefreq, instead of checkdatafreq
+- new implementation of meanfreq and sdfreq
+- lmfreq
+- hclustvfreq now takes a matrix from tablefreq (in order to avoid problems with strange tbl)
+- smartround now takes a matrix from tablefreq (in order to avoid  avoid problems with strange tbl)
+
+** freqweights 0.0.1
+
+- 2014-04-11
+- In the begining...
+- Ad maiorem Dei gloriam
+
