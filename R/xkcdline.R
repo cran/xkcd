@@ -1,6 +1,6 @@
 ## Emilio Torres Manzanera
 ## University of Oviedo
-## Time-stamp: <2014-12-11 19:45 emilio on emilio-despacho>
+## Time-stamp: <2016-01-13 10:47 emilio on emilio-despacho>
 ## ============================================================
 
 
@@ -130,9 +130,10 @@ xkcdline <- function(mapping, data, typexkcdline="segment", mask = TRUE, ...) {
                           c(pathmask,
                             geom_path(mapping = mapping, data = x, ...))
                        },
-                        mapping = mapping,
-                        mask = mask,
-                        ... = ...
+                       mapping = mapping,
+                       mask= mask 
+                        ## mask = mask,
+                        ## ... = ... ggplot2.0 does not like dots
                        )
   listofpaths  
 }

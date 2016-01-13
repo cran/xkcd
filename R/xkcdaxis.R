@@ -1,6 +1,6 @@
 ## Emilio Torres Manzanera
 ## University of Oviedo
-## Time-stamp: <2014-12-15 15:48 emilio on emilio-despacho>
+## Time-stamp: <2016-01-13 18:08 emilio on emilio-despacho>
 ## ============================================================
 
 ##' Plot the axis
@@ -16,6 +16,7 @@
 ##' @import ggplot2
 ##' @import extrafont
 ##' @importFrom Hmisc bezier
+##' @importFrom stats runif
 ##' @export
 ##' @examples
 ##' xrange <- range(mtcars$mpg)
@@ -30,7 +31,7 @@ xkcdaxis <- function(xrange, yrange, ...) {
   xjitteramount <- diff(xrange)/50
   yjitteramount <- diff(yrange)/50
   ## This cause R CMD check to give the note
-  ## “no visible binding for global variable”
+  ## 'no visible binding for global variable'
   ## Notes do not forbbiden the submission
   ## I will follow this suggestion:
   ## http://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when

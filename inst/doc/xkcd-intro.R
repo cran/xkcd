@@ -58,7 +58,7 @@
 
 
 ###################################################
-### code chunk number 6: xkcd-intro.Rnw:215-222 (eval = FALSE)
+### code chunk number 6: embedfonts (eval = FALSE)
 ###################################################
 ## ggsave("gr1.pdf", plot=p,  width=12, height=4)
 ## if(.Platform$OS.type != "unix") {
@@ -373,9 +373,6 @@
 ## 
 ## 
 ## resumenlargo <- melt(resumen[,c("tonombre","llegan","sevan")])
-## resumenlargo
-## 
-## resumenlargo$tonombre
 ## 
 ## oo <- order(resumen$llegan)
 ## nombreordenados <- (resumen$tonombre)[oo]
@@ -399,15 +396,8 @@
 ##   geom_text(aes(x=(tonombre),y=0,label=tonombre), data=resumenlargo,family="xkcd")
 ## 
 ## 
-## kk2
-## 
-## 
-## resumen
 ## lleganespana <- sum(resumen$topersons)*100/ sum(resumen$persons)
 ## sevanespana <- sum(resumen$frompersons)*100/ sum(resumen$persons)
-## 
-## lleganespana
-## sevanespana
 ## 
 ## 
 ## lineaespana1 <-   xkcdline(mapping=aes(xbegin=1-0.5,ybegin=lleganespana,xend=15+0.5, yend=lleganespana, yjitteramount=0.051), data= resumenlargo, linetype=2,mask=FALSE)
@@ -426,7 +416,6 @@
 ## 
 ## 
 ## 
-## kk5
 ## 
 ## xrange <- c(1,15)
 ## yrange <- c(-1.3,1.6)
@@ -469,7 +458,6 @@
 ##   xkcdline(aes(xbegin=xbegin,xend=xend,yend=yend,ybegin=ybegin), yjitteramount=0.135,data=data.frame(xbegin=9.0, xend=7.2, ybegin=1.2, yend=1.3))
 ## 
 ## 
-## kk7
 ## ggsave(kk7,filename="grsevan.png")
 ## 
 

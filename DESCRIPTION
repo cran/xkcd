@@ -1,17 +1,16 @@
 Package: xkcd
 Type: Package
-Title: Plotting ggplot2 graphics in an XKCD style
-Version: 0.0.4
-Date: 2014-12-08
+Title: Plotting ggplot2 Graphics in an XKCD Style
+Version: 0.0.5
+Date: 2016-01-13
 Author: Emilio Torres-Manzanera
 Maintainer: Emilio Torres-Manzanera <torres@uniovi.es>
-Description: This package allows the representation of ggplot2 graphs using the
-    XKCD style.
+Description: Plotting ggplot2 graphs using the XKCD style.
 License: GPL-3
 Depends: ggplot2, extrafont
-Imports: Hmisc
-URL: http://xkcd.r-forge.r-project.org/
-Packaged: 2014-12-15 16:02:26 UTC; emilio
+Imports: Hmisc, stats
+URL:
 NeedsCompilation: no
+Packaged: 2016-01-13 17:26:42 UTC; emilio
 Repository: CRAN
-Date/Publication: 2014-12-15 20:02:12
+Date/Publication: 2016-01-13 22:43:29
