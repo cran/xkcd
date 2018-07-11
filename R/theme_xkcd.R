@@ -1,6 +1,6 @@
 ## Emilio Torres Manzanera
 ## University of Oviedo
-## Time-stamp: <2014-12-15 15:47 emilio on emilio-despacho>
+## Time-stamp: <2018-05-23 17:38 emilio on emilio-despacho>
 ## ============================================================
 
 ##' Creates an XKCD theme
@@ -14,14 +14,11 @@
 ##' See the vignette \code{vignette("xkcd-intro")}
 ##' @export
 ##' @examples
+##' \dontrun{
 ##' p <- ggplot() + geom_point(aes(mpg, wt), data=mtcars) +
 ##'      theme_xkcd()
 ##' p
-
-
-
-
-
+##' }
 theme_xkcd <- function(){
   if( "xkcd" %in% extrafont::fonts() ) {
     theme(panel.grid.major = element_blank(),
