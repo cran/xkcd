@@ -1,17 +1,30 @@
 Package: xkcd
 Type: Package
-Title: Plotting ggplot2 Graphics in an XKCD Style
-Version: 0.0.6
-Date: 2018-07-10
-Author: Emilio Torres-Manzanera
-Maintainer: Emilio Torres-Manzanera <torres@uniovi.es>
-Description: Plotting ggplot2 graphs using the XKCD style.
-License: GPL-3
-Depends: ggplot2 (>= 3.0), extrafont
-Imports: Hmisc, stats
-URL:
+Title: Plotting 'ggplot2' Graphics in an 'XKCD' Style
+Version: 0.1.0
+Date: 2025-10-23
+Maintainer: Enrique Toledo <enriquetoledo@gmail.com>
+Authors@R: c(
+    person(given = "Emilio", family = "Torres-Manzanera", role = "aut",
+    email= "torres@uniovi.es"),
+    person(given = "Enrique", family = "Toledo", role = c("ctb", "cre"), 
+           email = "enriquetoledo@gmail.com"))
+VignetteBuilder: knitr
+Description: Provides custom geoms and themes to create charts and graphics in 
+    the distinctive, hand-drawn 'XKCD' webcomic style using the 'ggplot2' framework. 
+    The package utilizes custom layers for jittered lines, segments, circles, and 
+    figures, and includes a theme that supports the necessary 'XKCD' font.
+License: MIT + file LICENSE
+URL: https://github.com/ToledoEM/xkcd
+BugReports: https://github.com/ToledoEM/xkcd/issues
+Depends: R (>= 4.0), ggplot2 (>= 3.4.0)
+Imports: Hmisc, stats, grid, rlang, extrafont
+Suggests: knitr, rmarkdown, zoo, reshape, splancs, lattice, pkgdown
+RoxygenNote: 7.3.3
+Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2018-07-11 14:49:14 UTC; emilio
-RoxygenNote: 6.0.1
+Packaged: 2025-11-19 17:20:38 UTC; enrique
+Author: Emilio Torres-Manzanera [aut],
+  Enrique Toledo [ctb, cre]
 Repository: CRAN
-Date/Publication: 2018-07-11 15:30:02 UTC
+Date/Publication: 2025-11-19 17:50:01 UTC

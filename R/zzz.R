@@ -1,21 +1,25 @@
-## Emilio Torres Manzanera
-## University of Oviedo
-## Time-stamp: <2014-04-20 dom 17:01 emilio on emilio-Satellite-P100>
-## ============================================================
-    
-## Borrowed from dplyr
-## Otherwise, the print options of trunc_mat fails
-.onAttach <- function(libname, pkgname) {
-  op <- options()
-  op.dplyr <- list(
-    dplyr.show_sql = FALSE,
-    dplyr.explain_sql = FALSE,
-    dplyr.strict_sql = FALSE,
-    dplyr.print_min = 10L,
-    dplyr.print_max = 100L
-  )
-  toset <- !(names(op.dplyr) %in% names(op))
-  if(any(toset)) options(op.dplyr[toset])
+## Package startup hooks
+## Provide an opt-in automatic font loader so users can enable automatic
+## registration of system fonts via the `extrafont` package.
 
-  invisible()
+.onAttach <- function(libname, pkgname) {
+	# Option to opt in to automatic font loading. Default is FALSE to avoid
+	# side-effects during library() by default.
+	opt <- getOption("xkcd.auto_load_fonts", default = FALSE)
+	if (isTRUE(opt)) {
+		if (requireNamespace("extrafont", quietly = TRUE)) {
+			tryCatch({
+				# Attempt to load fonts for common devices quietly; users can override
+				# by setting the device argument themselves.
+				extrafont::loadfonts(device = "win", quiet = TRUE)
+				extrafont::loadfonts(device = "pdf", quiet = TRUE)
+			}, error = function(e) {
+				packageStartupMessage("xkcd: automatic font loading requested but failed: ", conditionMessage(e))
+			})
+		} else {
+			packageStartupMessage("xkcd: automatic font loading requested but 'extrafont' is not installed")
+		}
+	}
 }
+
+## End of zzz.R

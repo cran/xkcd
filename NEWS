@@ -1,5 +1,22 @@
 # -*- mode: org ; ispell-local-dictionary: "british" -*-  
 
+* xkcd 0.1.0
+
+** External (Breaking Changes)
+- **Deprecated `xkcdline()`** and introduced the new, robust **`geom_xkcdpath()`**. Users should migrate from `xkcdline(...)` to `geom_xkcdpath(aes(x=x, y=y, xend=xend, yend=yend), ...)` for segments, and utilize the new `diameter` aesthetic for circles.
+- **Improved `xkcdaxis()`** to use the new `geom_xkcdpath()` internally.
+- **Improved `xkcdrect()`** to use the new `geom_xkcdpath()` for borders.
+- **Improved `xkcdman()`** to use the new `geom_xkcdpath()` for drawing bones and the head.
+- **Modernized `theme_xkcd()`** with improved font checking logic.
+- **Vignette converted** from Rnw/LaTeX to R Markdown (`.Rmd`) format.
+
+** Internal
+- **New Core: `GeomXkcdPath`** and **`GeomXkcdPathProto`** introduced to replace old, fragile NSE (Non-Standard Evaluation) logic in `xkcdline`. This uses native `ggplot2::ggproto` for robust data mapping.
+- **Removed deprecated helpers** (`pointssegment`, `pointscircunference` moved to R/utils.R) and old data manipulation functions (`mappingjoin`, etc.).
+- **Removed obsolete `.onAttach`** from `zzz.R` as modern `dplyr`/`tibble` handle printing options automatically.
+- **Updated Dependencies:** Added `grid` and `rlang` to Imports for custom geom implementation.
+
+
 * xkcd 0.0.6
 
 ** External

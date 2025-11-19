@@ -1,0 +1,23 @@
+url: https://toledoem.github.io/xkcd/
+destination: docs/
+
+template:
+  bootstrap: 5
+  includes:
+    in_header: |
+      <script data-goatcounter="https://etoledo.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+navbar:
+  title: xkcd
+  left:
+    - text: Home
+      href: index.html
+    - text: Reference
+      href: reference/index.html
+    - text: Articles
+      href: articles/index.html
+articles:
+  - title: Vignettes
+    contents:
+      - xkcd-intro
+

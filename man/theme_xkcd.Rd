@@ -7,17 +7,20 @@
 theme_xkcd()
 }
 \value{
-A layer with the theme.
+A \code{\link[ggplot2]{theme}} object.
 }
 \description{
-This function creates an XKCD theme
+This function creates an XKCD theme, applying the 'xkcd' font if available.
 }
 \note{
-See the vignette \code{vignette("xkcd-intro")}
+The "xkcd" font must be installed and registered with \code{extrafont} for the
+full effect. See the vignette \code{vignette("xkcd-intro")} for installation instructions.
 }
 \examples{
 \dontrun{
-p <- ggplot() + geom_point(aes(mpg, wt), data=mtcars) +
+# Assuming 'xkcd' font is installed and registered:
+p <- ggplot(mtcars, aes(mpg, wt)) +
+     geom_point() +
      theme_xkcd()
 p
 }

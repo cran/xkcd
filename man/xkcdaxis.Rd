@@ -11,16 +11,13 @@ xkcdaxis(xrange, yrange, ...)
 
 \item{yrange}{The range of the Y axe.}
 
-\item{...}{Other arguments.}
+\item{...}{Other arguments passed to geom_xkcdpath.}
 }
 \value{
-A layer with the axis.
+A list of layers containing the axes, coordinate system, and theme.
 }
 \description{
-This function plots the axis
-}
-\details{
-It plots the axis of the graph.
+This function plots the axis in an XKCD style.
 }
 \examples{
 \dontrun{
