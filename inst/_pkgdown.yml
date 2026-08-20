@@ -7,6 +7,7 @@ template:
     in_header: |
       <script data-goatcounter="https://etoledo.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+
 navbar:
   title: xkcd
   left:
@@ -16,8 +17,12 @@ navbar:
       href: reference/index.html
     - text: Articles
       href: articles/index.html
+    - text: Figure Pose Helper
+      href: stickfigurehelper/index.html
+
 articles:
   - title: Vignettes
     contents:
       - xkcd-intro
-
+      - xkcd-penguins
+      - xkcd-figure

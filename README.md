@@ -1,13 +1,25 @@
 # xkcd
 
+[![R-CMD-check](https://github.com/ToledoEM/xkcd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ToledoEM/xkcd/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/ToledoEM/xkcd/graph/badge.svg)](https://app.codecov.io/gh/ToledoEM/xkcd)
+[![CRAN status](https://www.r-pkg.org/badges/version/xkcd)](https://CRAN.R-project.org/package=xkcd)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/xkcd)](https://CRAN.R-project.org/package=xkcd)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 
-![](https://toledoem.github.io/img/xkcd_logo.png)
+![xkcd package logo](https://toledoem.github.io/img/xkcd_logo.png)
 
 An R package to create hand-drawn (xkcd-style) plots and elements for ggplot2.
 
 This repository contains the source for the `xkcd` package (development version). Originally from https://r-forge.r-project.org/projects/xkcd/ which is deprecated and now maintained independently.
 
 ## Install
+
+Install the latest CRAN version:
+
+```r
+install.packages("xkcd")
+```
 
 Install the current development version from GitHub:
 
@@ -18,6 +30,7 @@ remotes::install_github("ToledoEM/xkcd")
 # or using devtools
 devtools::install_github("ToledoEM/xkcd")
 ```
+
 
 ## Quick Start
 
@@ -38,6 +51,38 @@ ggplot(df, aes(x = x, y = y)) +
 - Uses `linewidth` (ggplot2 >= 3.4.0) for line thickness; older code using `size` is supported where possible.
 - Requires xkcd fonts to be installed; see **Fonts** section below.
 
+### New in 0.1.1
+
+- **Reproducible plots.** `geom_xkcdpath()`, `xkcdrect()` and `xkcdman()` take a
+  `seed` argument, so the same plot renders identically every time. The global
+  random state is left untouched.
+
+  ```r
+  ggplot(df, aes(x = x, y = y)) +
+    geom_xkcdpath(linewidth = 1, seed = 42) +
+    theme_xkcd()
+  ```
+
+- **`wobble` argument** scales how much the lines wander. `1` is the default look,
+  `0` draws them straight.
+
+- **`xkcdrect()` is now a standard geom** (breaking change). It returns a single
+  layer and uses the usual `fill`, `colour` and `linewidth` aesthetics, which can be
+  mapped to variables. Faceting and plot-level aesthetics now work.
+
+  ```r
+  # before
+  xkcdrect(mapping, data, fillcolour = "pink", borderlinewidth = 1)
+
+  # now
+  xkcdrect(mapping, data, fill = "pink", linewidth = 1)
+  ```
+
+  The old `fillcolour` / `bordercolour` / `borderlinewidth` arguments still work for
+  one release but warn.
+
+- **`xkcdline()` is deprecated** in favour of `geom_xkcdpath()` and warns when used.
+
 ## Fonts
 
 To use xkcd fonts in your plots, you need to install and register them with R's graphics system.
@@ -56,6 +101,9 @@ download.file(
 )
 font_import(pattern = "[X/x]kcd", prompt = FALSE)
 ```
+
+You can also download the font from the iphyton repository XKCD-font: [xkcd.ttf](https://github.com/ipython/xkcd-font/blob/master/xkcd-script/font/xkcd-script.ttf?raw=true)
+
 
 ### Quick font-check (fundamental)
 
@@ -81,6 +129,12 @@ try({
   ggsave(filename = file.path("vignettes", "font_check.png"), plot = p, width = 6, height = 4)
 }, silent = TRUE)
 ```
+
+![Font check example plot](man/figures/font_check.png)
+
+      
+
+
 ### Load Fonts for Plotting
 
 Before plotting, register fonts with your graphics device:
@@ -108,11 +162,15 @@ library(xkcd)
 
 This is opt-in to avoid surprising side-effects during package attach.
 
+## Figure Pose Helper
+
+An interactive browser tool to design `xkcdman()` poses visually — drag limbs, adjust sliders, and copy the generated R code directly into your script.
+
+**[Open the Figure Pose Helper](https://toledoem.github.io/xkcd/stickfigurehelper/index.html)**
+
 ## Example Images
 
-Below are three examples from the vignette:
-
-![Font availability check (font_check)](vignettes/font_check.png)
+Below are two examples from the vignette:
 
 ![Mother's Day example (mommy_plot)](vignettes/mommy_plot.png)
 
@@ -144,11 +202,19 @@ devtools::build_vignettes()
 devtools::install_local()
 ```
 
-To render the vignette directly:
+To render the vignettes directly:
 
 ```r
 rmarkdown::render("vignettes/xkcd-intro.Rmd")
+rmarkdown::render("vignettes/xkcd-figure.Rmd")
+rmarkdown::render("vignettes/xkcd-penguins.Rmd")
 ```
+
+Three vignettes are available:
+
+- **xkcd-intro** — Introduction and basic usage
+- **xkcd-figure** — Drawing xkcd-style stick figures
+- **xkcd-penguins** — Example with the Palmer Penguins dataset
 
 ## Dependencies
 
@@ -156,13 +222,13 @@ The package requires:
 
 - **ggplot2** — Graphics framework
 - **Hmisc** — Bezier curve interpolation
-- **grid** — Low-level graphics primitives
-- **extrafont** (optional) — Font management
+- **grid** — Low-level graphics primitives (ships with R, no install needed)
+- **extrafont** — Font management
 
 Install dependencies with:
 
 ```r
-install.packages(c("ggplot2", "Hmisc", "grid", "extrafont"))
+install.packages(c("ggplot2", "Hmisc", "extrafont"))
 ```
 
 ## Contributing

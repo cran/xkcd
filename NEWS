@@ -1,4 +1,49 @@
-# -*- mode: org ; ispell-local-dictionary: "british" -*-  
+# -*- mode: org ; ispell-local-dictionary: "british" -*-
+
+* xkcd 0.1.1
+
+** External
+- **Reproducible wobble.** `geom_xkcdpath()` and `xkcdman()` gain a `seed`
+  argument. With a seed the same plot renders identically every time; each row is
+  offset from the seed so figures still differ from one another. The global RNG is
+  left untouched.
+- **New `wobble` argument** to `geom_xkcdpath()`, a scalar multiplier on both
+  jitter amounts. `wobble = 1` is the previous behaviour; `wobble = 0` draws
+  straight lines.
+- **`ratioxy` is now a proper aesthetic** with a default of 1. Previously it was
+  read only as a data column, so passing `ratioxy =` as a layer argument was
+  silently ignored and circles rendered as ellipses.
+- **`xkcdman()` now uses `geom_xkcdpath()`**, as 0.1.0 intended but did not do. A
+  stick figure is now two layers instead of eight `xkcdline()` calls.
+- **`xkcdline()` now warns.** It is deprecated in favour of `geom_xkcdpath()` and
+  will be removed in a future release.
+- **`xkcdrect()` rewritten as a proper geom (breaking).** It is now a single
+  `layer()` backed by the new `GeomXkcdRect`, instead of evaluating its own mapping
+  and returning a list of five layers. This means it now supports faceting, the
+  `.data` pronoun, and aesthetics inherited from the plot -- none of which worked
+  before. The fill and border are set with the standard `fill`, `colour` and
+  `linewidth` aesthetics and may be mapped to variables; the old `fillcolour`,
+  `bordercolour` and `borderlinewidth` arguments still work for one release but
+  warn. `xkcdrect()` also gains `wobble` and `seed`.
+
+** Internal
+- Fixed the CRAN NOTE on r-devel: the `xkcd-intro` vignette used the deprecated
+  `structure(..., .Label=)` idiom to build a factor.
+- `theme_xkcd()` caches the `extrafont::fonts()` lookup for the session instead of
+  reading the font database on every call.
+- Single shared mask-thickness rule; previously duplicated with divergent formulas
+  in `xkcdline()` and `GeomXkcdPath`.
+- Path expansion in `GeomXkcdPath$draw_panel()` preallocates and hoists the
+  row-invariant column lookup out of the loop.
+- Added a `testthat` suite (edition 3); the package previously had no tests.
+- Dropped the unused `lattice` suggestion and the unused `grid::polylineGrob`
+  import. Dropped `rlang` from Imports; the `GeomXkcdRect` rewrite removed the
+  only use of `eval_tidy()`.
+- Added `ggrepel` to Suggests and replaced `library(tidyverse)` with
+  `library(dplyr)` in the penguins vignette, so no vignette uses an undeclared
+  package.
+- `build-site.sh` and `stickfigurehelper/` are now in `.Rbuildignore`; they are
+  site-build assets, not package content.
 
 * xkcd 0.1.0
 
@@ -6,14 +51,13 @@
 - **Deprecated `xkcdline()`** and introduced the new, robust **`geom_xkcdpath()`**. Users should migrate from `xkcdline(...)` to `geom_xkcdpath(aes(x=x, y=y, xend=xend, yend=yend), ...)` for segments, and utilize the new `diameter` aesthetic for circles.
 - **Improved `xkcdaxis()`** to use the new `geom_xkcdpath()` internally.
 - **Improved `xkcdrect()`** to use the new `geom_xkcdpath()` for borders.
-- **Improved `xkcdman()`** to use the new `geom_xkcdpath()` for drawing bones and the head.
+- **Improved `xkcdman()`** to use the new `geom_xkcdpath()` for drawing bones and the head. (This landed in 0.1.1; in 0.1.0 `xkcdman()` still called `xkcdline()`.)
 - **Modernized `theme_xkcd()`** with improved font checking logic.
 - **Vignette converted** from Rnw/LaTeX to R Markdown (`.Rmd`) format.
 
 ** Internal
-- **New Core: `GeomXkcdPath`** and **`GeomXkcdPathProto`** introduced to replace old, fragile NSE (Non-Standard Evaluation) logic in `xkcdline`. This uses native `ggplot2::ggproto` for robust data mapping.
-- **Removed deprecated helpers** (`pointssegment`, `pointscircunference` moved to R/utils.R) and old data manipulation functions (`mappingjoin`, etc.).
-- **Removed obsolete `.onAttach`** from `zzz.R` as modern `dplyr`/`tibble` handle printing options automatically.
+- **New Core: `GeomXkcdPath`** introduced to replace old, fragile NSE (Non-Standard Evaluation) logic in `xkcdline`. This uses native `ggplot2::ggproto` for robust data mapping.
+- **Moved helpers** `pointssegment` and `pointscircunference` into `R/xkcdline.R`, and removed the old data manipulation functions (`mappingjoin`, etc.).
 - **Updated Dependencies:** Added `grid` and `rlang` to Imports for custom geom implementation.
 
 

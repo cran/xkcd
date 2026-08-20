@@ -5,14 +5,21 @@
 \title{Draw fuzzy rectangles}
 \usage{
 xkcdrect(
-  mapping,
-  data,
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
   ...,
-  fillcolour = "grey90",
-  bordercolour = "black",
-  borderlinewidth = 0.5,
   borderxjitteramount = 0.005,
-  borderyjitteramount = 0.005
+  borderyjitteramount = 0.005,
+  wobble = 1,
+  seed = NULL,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  fillcolour,
+  bordercolour,
+  borderlinewidth
 )
 }
 \arguments{
@@ -20,17 +27,32 @@ xkcdrect(
 
 \item{data}{Dataset used in this layer.}
 
-\item{...}{Optional arguments.}
+\item{stat}{The statistical transformation to use on the data for this layer.}
 
-\item{fillcolour}{The fill colour of the rectangle.}
+\item{position}{Position adjustment.}
 
-\item{bordercolour}{The colour of the fuzzy border lines.}
-
-\item{borderlinewidth}{The thickness of the fuzzy border lines. This is the package's implementation of the \code{linewidth} aesthetic.}
+\item{...}{Other arguments passed on to \code{\link[ggplot2]{layer}}.}
 
 \item{borderxjitteramount}{Horizontal jitter amount for the border.}
 
 \item{borderyjitteramount}{Vertical jitter amount for the border.}
+
+\item{wobble}{Scalar multiplier applied to both jitter amounts. \code{1} leaves
+them unchanged; \code{0} draws straight borders.}
+
+\item{seed}{Optional integer for a reproducible border. See \code{\link{geom_xkcdpath}}.}
+
+\item{na.rm}{If \code{FALSE}, missing values are removed with a warning.}
+
+\item{show.legend}{Show legend.}
+
+\item{inherit.aes}{Whether to inherit aesthetics from the plot.}
+
+\item{fillcolour}{Deprecated. Use the \code{fill} aesthetic.}
+
+\item{bordercolour}{Deprecated. Use the \code{colour} aesthetic.}
+
+\item{borderlinewidth}{Deprecated. Use the \code{linewidth} aesthetic.}
 }
 \value{
 A layer.
@@ -39,16 +61,18 @@ A layer.
 It draws fuzzy rectangles.
 }
 \details{
-This function draws fuzzy rectangles.
+This function draws rectangles with hand-drawn, wobbly borders.
 
-  It plots rectangles. The following aesthetics are required:
+The following aesthetics are required:
 \enumerate{
   \item xmin
   \item ymin
   \item xmax
   \item ymax
 }
-Additionally, you can use the aesthetics of \code{\link[ggplot2]{geom_path}} and \code{\link[ggplot2]{geom_rect}}.
+The fill and border are controlled with the standard \code{fill},
+\code{colour} and \code{linewidth} aesthetics, so they may be mapped to
+variables in the usual way.
 }
 \examples{
 \dontrun{
@@ -58,14 +82,14 @@ volunteers <- data.frame(year = c(2007:2011),
 xrange <- range(volunteers$year)
 yrange <- range(volunteers$number)
 
-p <- ggplot() + 
-     xkcdrect(aes(xmin = year - 0.2, 
+p <- ggplot() +
+     xkcdrect(aes(xmin = year - 0.2,
                   xmax = year + 0.2,
                   ymin = number - 500,
                   ymax = number + 500),
-              data = volunteers, 
-              fillcolour = "pink",
-              borderlinewidth = 1.2) +
+              data = volunteers,
+              fill = "pink",
+              linewidth = 1.2) +
      geom_point(aes(x = year, y = number), data = volunteers) +
      xkcdaxis(xrange, yrange) +
      theme_xkcd()
@@ -73,6 +97,6 @@ p
 }
 }
 \seealso{
-\code{\link[ggplot2]{aes}}, \code{\link[ggplot2]{geom_path}}
+\code{\link[ggplot2]{aes}}, \code{\link{geom_xkcdpath}}
 }
 \keyword{manip}

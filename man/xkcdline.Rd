@@ -18,5 +18,12 @@ xkcdline(mapping, data, typexkcdline = "segment", mask = TRUE, ...)
 \item{...}{Additional arguments}
 }
 \description{
-Draw lines or circles
+Deprecated in favour of [geom_xkcdpath()], which integrates with ggplot2's
+aesthetic machinery instead of rebuilding mappings by hand. Migrate segments to
+`geom_xkcdpath(aes(x = x, y = y, xend = xend, yend = yend), ...)` and circles to
+the `diameter` aesthetic.
 }
+\seealso{
+[geom_xkcdpath()]
+}
+\keyword{internal}

@@ -13,8 +13,10 @@ A \code{\link[ggplot2]{theme}} object.
 This function creates an XKCD theme, applying the 'xkcd' font if available.
 }
 \note{
-The "xkcd" font must be installed and registered with \code{extrafont} for the
-full effect. See the vignette \code{vignette("xkcd-intro")} for installation instructions.
+The "xkcd" font must be installed on your system for the full effect. Modern
+graphics devices pick it up directly; registering it with \code{extrafont} is
+only needed for pdf/postscript output. See the vignette
+\code{vignette("xkcd-intro")} for installation instructions.
 }
 \examples{
 \dontrun{

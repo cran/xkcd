@@ -3,10 +3,6 @@
 ## Time-stamp: <2018-05-23 17:37 emilio on emilio-despacho>
 ## ============================================================
 
-## NOTE: The utility functions 'pointssegment', 'pointscircunference',
-## and 'doforeachrow' have been removed from this file, as per the
-## modernization plan, and moved to another file (e.g., xkcdline.R).
-
 #' Plot the axis
 #'
 #' This function plots the axis in an XKCD style.
@@ -18,7 +14,6 @@
 #' @import ggplot2
 #' @import extrafont
 #' @importFrom Hmisc bezier
-#' @importFrom stats runif
 #' @export
 #' @examples
 #' \dontrun{
@@ -43,10 +38,9 @@ xkcdaxis <- function(xrange, yrange, ...) {
                          xend=xrange[2]+xjitteramount,
                          yend=yrange[1]-yjitteramount)
   
-  # Use direct aes() call (modernized: removed 'with(dataaxex, ...)')
   mappingsegment <- aes(x=x,y=y,xend=xend,yend=yend)
-  
-  # Draw X-axis using the new geom_xkcdpath
+
+  # Draw X-axis
   axex <- geom_xkcdpath(mappingsegment,
                         dataaxex,
                         yjitteramount = yjitteramount,
@@ -59,7 +53,7 @@ xkcdaxis <- function(xrange, yrange, ...) {
                          xend=xrange[1]-xjitteramount,
                          yend=yrange[2]+yjitteramount)
   
-  # Draw Y-axis using the new geom_xkcdpath
+  # Draw Y-axis
   axey <- geom_xkcdpath(mappingsegment,
                         dataaxey,
                         xjitteramount = xjitteramount,
@@ -73,15 +67,3 @@ xkcdaxis <- function(xrange, yrange, ...) {
   # Return the layers
   list(c(axex,axey), coordcarte, theme_xkcd())
 }
-
-# --------------------------------------------------------------------------
-# The following functions are DELETED as they are part of the old NSE system.
-# The new geom_xkcdpath handles these tasks internally.
-# --------------------------------------------------------------------------
-
-# DELETED: createdefaultmappinganddata
-# DELETED: doforeachrow
-# DELETED: mappingjoin
-# DELETED: mappingjoin2
-# DELETED: pointscircunference (MOVED)
-# DELETED: pointssegment (MOVED)

@@ -451,18 +451,17 @@ p2
 ```{r sevan, eval=TRUE}
 set.seed(130613)
 
-resumen <- structure(list(
-  tonombre = structure(c(1L, 2L, 3L, 11L, 4L, 5L, 8L, 6L, 7L, 9L, 10L, 14L, 12L, 13L, 15L), 
-                      .Label = c("Andalucía", "Aragón", "Asturias", "Canarias", "Cantabria", 
-                                "C-LaMancha", "CyLeón", "Cataluña", "Extremadura", "Galicia", 
-                                "Baleares", "Madrid", "Murcia", "La Rioja", "Valencia"), 
-                      class = "factor"),
+resumen <- data.frame(
+  tonombre = factor(c(1L, 2L, 3L, 11L, 4L, 5L, 8L, 6L, 7L, 9L, 10L, 14L, 12L, 13L, 15L),
+                    labels = c("Andalucía", "Aragón", "Asturias", "Canarias", "Cantabria",
+                               "C-LaMancha", "CyLeón", "Cataluña", "Extremadura", "Galicia",
+                               "Baleares", "Madrid", "Murcia", "La Rioja", "Valencia")),
   persons = c(2743706L, 515772L, 364410L, 399963L, 699410L, 212737L, 2847377L, 717874L, 894946L, 371502L, 942277L, 119341L, 2561918L, 493833L, 1661613L),
   frompersons = c(14266L, 3910L, 3214L, 3283L, 4371L, 1593L, 10912L, 8931L, 9566L, 3231L, 5407L, 940L, 21289L, 3202L, 9939L),
   topersons = c(10341L, 3805L, 2523L, 4039L, 3911L, 1524L, 12826L, 10897L, 7108L, 2312L, 4522L, 1066L, 26464L, 3529L, 9187L),
   llegan = c(0.38, 0.74, 0.69, 1.01, 0.56, 0.72, 0.45, 1.52, 0.79, 0.62, 0.48, 0.89, 1.03, 0.71, 0.55),
   sevan = c(0.52, 0.76, 0.88, 0.82, 0.62, 0.75, 0.38, 1.24, 1.07, 0.87, 0.57, 0.79, 0.83, 0.65, 0.60)
-), class = "data.frame", row.names = c(NA, -15L))
+)
 
 library(reshape)
 resumenlargo <- melt(resumen[, c("tonombre", "llegan", "sevan")])
@@ -559,7 +558,7 @@ ratioxy <- diff(xrange) / diff(yrange)
 mapping <- aes(xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax)
 
 p <- ggplot() + 
-  xkcdrect(mapping, data, fillcolour = "pink", borderlinewidth = 1) +
+  xkcdrect(mapping, data, fill = "pink", linewidth = 1) +
   xkcdaxis(xrange, yrange) +
   annotate("text", x = 16, y = 550,
            label = "Happy Mother's day", size = 6, family = "xkcd") +
@@ -627,21 +626,23 @@ xkcdman(mapping, data, ...)
 Draws fuzzy rectangles with hand-drawn borders.
 
 ```{r eval=FALSE}
-xkcdrect(mapping, data, fillcolour = "grey90", bordercolour = "black",
-         borderlinewidth = 0.5, borderxjitteramount = 0.005,
-         borderyjitteramount = 0.005)
+xkcdrect(mapping, data, borderxjitteramount = 0.005,
+         borderyjitteramount = 0.005, wobble = 1, seed = NULL)
 ```
 
 **Arguments:**
 - `mapping`: Aesthetic mapping with required aesthetics: xmin, xmax, ymin, ymax
 - `data`: Data frame with rectangle coordinates
-- `fillcolour`: Fill color of rectangles
-- `bordercolour`: Color of border lines
-- `borderlinewidth`: Width of border lines
 - `borderxjitteramount`: Horizontal jitter amount for borders
 - `borderyjitteramount`: Vertical jitter amount for borders
+- `wobble`: Multiplier on both jitter amounts; `0` draws straight borders
+- `seed`: Optional integer for a reproducible border
 
-**Returns:** A list of layers with fill and border
+The fill and border are set with the standard `fill`, `colour` and `linewidth`
+aesthetics, which may be mapped to variables. The former `fillcolour`,
+`bordercolour` and `borderlinewidth` arguments are deprecated but still work.
+
+**Returns:** A layer
 
 ### geom_xkcdpath()
 
